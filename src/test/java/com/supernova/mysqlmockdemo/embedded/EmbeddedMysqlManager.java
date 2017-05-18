@@ -14,7 +14,7 @@ import static com.wix.mysql.ScriptResolver.classPathScript;
 import static com.wix.mysql.config.Charset.UTF8;
 import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
 import static com.wix.mysql.config.SchemaConfig.aSchemaConfig;
-import static com.wix.mysql.distribution.Version.v5_7_latest;;
+import static com.wix.mysql.distribution.Version.v5_7_17;
 
 
 @Configuration
@@ -53,7 +53,7 @@ public class EmbeddedMysqlManager implements DisposableBean {
 	}
 	
 	private void startDatabase() {
-		MysqldConfig dbConfig = aMysqldConfig(v5_7_latest)
+		MysqldConfig dbConfig = aMysqldConfig(v5_7_17)
 			    .withCharset(UTF8)
 			    .withPort(DB_PORT)
 			    .withUser(DB_USER, DB_PASSWD)
