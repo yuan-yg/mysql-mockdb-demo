@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>mysql-mockdb-demo</name>
-	<description>Fake rbc-sendback callback based on db data</description>
+	<description>Toy app to test wix-embedded-mysql</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
