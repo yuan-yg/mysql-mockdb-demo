@@ -1,60 +1,46 @@
 package com.supernova.mysqlmockdemo;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import com.supernova.mysqlmockdemo.embedded.EmbeddedMysqlManager;
-import com.supernova.mysqlmockdemo.repository.JdbcTemplateFactory;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = EmbeddedMysqlManager.class)
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@Import({ EmbeddedMysqlManager.class })
+@ComponentScan(basePackages = {"com.supernova.mysqlmockdemo"})
 public class EmailControllerTest {
 
 	@Autowired
 	private EmbeddedMysqlManager mysqlManager;
 	
-	private MockMvc mockMvc;
-	
-	@Mock
-	private JdbcTemplateFactory mockFactory;
-	
-	@InjectMocks
-	private EmailController controller;
+	@Autowired
+	private TestRestTemplate restTemplate;
 		
 	@Before
 	public void setup() {		
-		// this must be called for the @Mock annotations above to be processed
-		// and for the mock service to be injected into the controller under
-		// test.
-		MockitoAnnotations.initMocks(this);
-
-		mockMvc = MockMvcBuilders.standaloneSetup(controller)
-				.build();
+		// if we want to, we can reset db before each test.
+		mysqlManager.reloadSchema();
 	}
 
 	@Test
 	public void testCountEmail() throws Exception {
-		when(mockFactory.getJdbcTemplate())
-			.thenReturn(mysqlManager.getJdbcTemplate());
+		ResponseEntity<MyResponse> entity = restTemplate.getForEntity("/emails/count",  MyResponse.class);
 		
-		mockMvc.perform(get("/emails/count"))
-			.andExpect(status().is2xxSuccessful())
-			.andExpect(jsonPath("count", is(2)));
+		assertThat(entity.getStatusCode().is2xxSuccessful());
+		
+		MyResponse response = entity.getBody();
+		assertThat(response.getCount()).isEqualTo(2);
 	}
 
 }

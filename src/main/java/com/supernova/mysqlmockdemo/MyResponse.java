@@ -1,17 +1,20 @@
 package com.supernova.mysqlmockdemo;
 
-class MyResponse {
-	private int count;
+public class MyResponse {
+	private long count;
 
-	public MyResponse(int count) {
-		this.count = count;
+	public MyResponse() {
 	}
 
-	public int getCount() {
+	public MyResponse(long count2) {
+		this.count = count2;
+	}
+
+	public long getCount() {
 		return this.count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 }
