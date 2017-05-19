@@ -57,14 +57,14 @@ public class EmbeddedMysqlManager implements DisposableBean {
 		return dataSource;
 	}
 
-	@Bean
-	public JdbcTemplate getJdbcTemplate() {
-		if (jdbcTemplate == null) {
-			logger.info("getJdbcTemplate create bean...");
-			jdbcTemplate = new JdbcTemplate(getDataSource());
-		}
-		return jdbcTemplate;
-	}
+//	@Bean
+//	public JdbcTemplate getJdbcTemplate() {
+//		if (jdbcTemplate == null) {
+//			logger.info("getJdbcTemplate create bean...");
+//			jdbcTemplate = new JdbcTemplate(getDataSource());
+//		}
+//		return jdbcTemplate;
+//	}
 	
 	public void reloadSchema() {
 		mysqld.reloadSchema(schemaConfig);

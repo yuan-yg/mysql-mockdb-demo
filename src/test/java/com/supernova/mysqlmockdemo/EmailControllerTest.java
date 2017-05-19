@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.supernova.mysqlmockdemo.embedded.EmbeddedMysqlManager;
@@ -17,7 +16,6 @@ import com.supernova.mysqlmockdemo.embedded.EmbeddedMysqlManager;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-@Import({ EmbeddedMysqlManager.class })
 @ComponentScan(basePackages = {"com.supernova.mysqlmockdemo"})
 public class EmailControllerTest {
 
@@ -29,7 +27,7 @@ public class EmailControllerTest {
 		
 	@Before
 	public void setup() {		
-		// if we want to, we can reset db before each test.
+		// this is to show that we CAN reset db before each test.
 		mysqlManager.reloadSchema();
 	}
 
