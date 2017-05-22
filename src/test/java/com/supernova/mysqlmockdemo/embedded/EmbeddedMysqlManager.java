@@ -3,7 +3,6 @@ package com.supernova.mysqlmockdemo.embedded;
 import org.slf4j.*;
 
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
