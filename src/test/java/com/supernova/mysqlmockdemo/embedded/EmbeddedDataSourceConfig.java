@@ -15,15 +15,13 @@ public class EmbeddedDataSourceConfig {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private MysqlDataSource dataSource;
-
-	private EmbeddedMysqlManager mysqlManager;
 	
 	@Bean
 	public DataSource getDataSource() {
 		if (dataSource == null) {
 			logger.info("getDataSource create bean...");
 			
-			mysqlManager = EmbeddedMysqlManager.getInstance();
+			EmbeddedMysqlManager mysqlManager = EmbeddedMysqlManager.getInstance();
 			
 			dataSource = new MysqlDataSource();
 			dataSource.setUrl(mysqlManager.getDbUrl());
