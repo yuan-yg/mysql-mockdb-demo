@@ -72,11 +72,11 @@ public class EmbeddedMysqlManager {
 		return "jdbc:mysql://localhost:" + dbPort + "/" + dbSchemaName;
 	}
 
-	public String getDbUser() {
+	String getDbUser() {
 		return DB_USER;
 	}
 
-	public String getDbPassword() {
+	String getDbPassword() {
 		return DB_PASSWD;
 	}
 }
