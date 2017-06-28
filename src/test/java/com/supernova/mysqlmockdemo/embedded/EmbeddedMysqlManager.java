@@ -2,10 +2,6 @@ package com.supernova.mysqlmockdemo.embedded;
 
 import org.slf4j.*;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.wix.mysql.EmbeddedMysql;
 import com.wix.mysql.config.MysqldConfig;
 import com.wix.mysql.config.SchemaConfig;
@@ -17,14 +13,15 @@ import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
 import static com.wix.mysql.config.SchemaConfig.aSchemaConfig;
 import static com.wix.mysql.distribution.Version.v5_7_17;
 
-import javax.sql.DataSource;
+public class EmbeddedMysqlManager {
+	
+	private static EmbeddedMysqlManager instance;
 
-@Configuration
-public class EmbeddedMysqlManager implements DisposableBean {
+	private EmbeddedMysqlManager() {
+		startDatabase();
+	}
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	private MysqlDataSource dataSource;
 
 	private EmbeddedMysql mysqld;
 	private SchemaConfig schemaConfig;
@@ -36,20 +33,6 @@ public class EmbeddedMysqlManager implements DisposableBean {
 	private int dbPort = 4408;
 
 	private String dbSchemaName="tiger_db";
-
-	@Bean
-	public DataSource getDataSource() {
-		if (dataSource == null) {
-			logger.info("getDataSource create bean...");
-			startDatabase();
-			
-			dataSource = new MysqlDataSource();
-			dataSource.setUrl("jdbc:mysql://localhost:" + dbPort + "/" + dbSchemaName);
-			dataSource.setUser(DB_USER);
-			dataSource.setPassword(DB_PASSWD);
-		}
-		return dataSource;
-	}
 	
 	public void reloadSchema() {
 		mysqld.reloadSchema(schemaConfig);
@@ -72,9 +55,28 @@ public class EmbeddedMysqlManager implements DisposableBean {
 	}
 
 	@Override
-	public void destroy() throws Exception {
+	public void finalize() {
 		if (mysqld != null) {
 			mysqld.stop();
 		}
+	}
+
+	public static EmbeddedMysqlManager getInstance() {
+		if (instance == null) {
+			instance = new EmbeddedMysqlManager();
+		}
+		return instance;
+	}
+
+	String getDbUrl() {
+		return "jdbc:mysql://localhost:" + dbPort + "/" + dbSchemaName;
+	}
+
+	public String getDbUser() {
+		return DB_USER;
+	}
+
+	public String getDbPassword() {
+		return DB_PASSWD;
 	}
 }

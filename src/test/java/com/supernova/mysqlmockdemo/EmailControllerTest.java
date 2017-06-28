@@ -19,8 +19,7 @@ import com.supernova.mysqlmockdemo.embedded.EmbeddedMysqlManager;
 @ComponentScan(basePackages = {"com.supernova.mysqlmockdemo"})
 public class EmailControllerTest {
 
-	@Autowired
-	private EmbeddedMysqlManager mysqlManager;
+	private EmbeddedMysqlManager mysqlManager = EmbeddedMysqlManager.getInstance();
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
